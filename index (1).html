@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<title>Sociei · Meus Ganhos</title>
+<style>
+:root{color-scheme:dark;--bg:#0a0a0f;--panel:rgba(30,30,40,.7);--border:rgba(255,255,255,.1);--text:#fff;--muted:#8b8b9e;--acc:#b388ff;--danger:#ff5252;--nav:70px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:system-ui,-apple-system,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text);padding-bottom:calc(var(--nav) + env(safe-area-inset-bottom,0px) + 20px);background-image:radial-gradient(circle at top,#1a1a2e 0%,#0a0a0f 100%);background-attachment:fixed}
+header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.85);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);padding:calc(15px + env(safe-area-inset-top,0px)) 20px 15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:20px;font-weight:800}.logo span{color:var(--acc)}
+nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + env(safe-area-inset-bottom,0px));background:rgba(15,15,20,.95);-webkit-backdrop-filter:blur(15px);backdrop-filter:blur(15px);border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom,0px);z-index:100}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;padding:12px 10px;background:none;border:0}
+.nav-item.ativo{color:var(--text)}.nav-item.ativo svg{stroke:var(--acc)}
+.nav-item svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tela{display:none;padding:20px;max-width:600px;margin:0 auto}.tela.ativa{display:block}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:24px;padding:20px;margin-bottom:16px}
+h2{font-size:16px;margin:0 0 15px;color:var(--muted);font-weight:600}
+.saldo{text-align:center;margin-bottom:12px;position:relative}
+.saldo small{color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:1px}
+.saldo h1{font-size:42px;margin:5px 0 0;font-weight:800;color:var(--acc);transition:.3s}
+.olho{position:absolute;right:0;top:0;background:none;border:0;cursor:pointer;padding:5px}
+.olho svg{width:24px;height:24px;stroke:var(--muted);fill:none;stroke-width:2}
+.oculto{filter:blur(10px);user-select:none}
+.linha{display:flex;justify-content:space-between;font-size:14px;padding:12px 0;border-top:1px solid var(--border)}.linha span{color:var(--muted)}
+.bar{height:10px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;margin:15px 0 10px}
+.bar i{display:block;height:100%;background:var(--acc);border-radius:99px;width:0;transition:width .5s}
+.mt{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+label{display:block;color:var(--muted);font-size:13px;margin-bottom:8px}
+input{width:100%;padding:16px;border-radius:16px;border:1px solid var(--border);background:rgba(0,0,0,.4);color:#fff;font-size:18px;font-weight:700;outline:none}
+input:focus{border-color:var(--acc)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.btn{width:100%;padding:18px;border-radius:16px;border:0;background:var(--acc);color:#000;font-size:16px;font-weight:700;cursor:pointer;margin-top:6px}
+.btn2{width:100%;padding:12px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;margin-top:12px;background:rgba(255,82,82,.1);color:var(--danger);border:1px solid rgba(255,82,82,.3)}
+.btn3{flex:1;padding:12px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,.06);color:var(--text);font-size:13px;font-weight:700;cursor:pointer}
+.item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border)}.item:last-child{border:0}
+.item small{font-size:12px;color:var(--muted)}
+.item b{color:var(--acc);margin-right:8px}
+.ib{background:rgba(255,255,255,.08);color:var(--text);border:0;padding:8px 10px;border-radius:8px;cursor:pointer;margin-left:6px}
+.ib.x{background:rgba(255,82,82,.1);color:var(--danger)}
+.barras{display:flex;align-items:flex-end;gap:8px;height:130px}
+.barra{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px;font-size:10px;color:var(--muted)}
+.barra b{width:100%;border-radius:8px 8px 4px 4px;background:var(--acc);min-height:3px}.barra.hoje span{color:var(--text);font-weight:700}
+textarea{width:100%;height:90px;padding:12px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.4);color:#fff;font-size:12px;margin-top:8px}
+.empty{text-align:center;color:var(--muted);padding:30px 0;font-size:14px}
+</style>
+</head>
+<body>
+<header><div class="logo">🟣 <span>Sociei</span></div><div style="font-size:12px;color:var(--muted)" id="hd"></div></header>
+
+<main id="t-inicio" class="tela ativa">
+  <div class="card">
+    <div class="saldo"><button class="olho" id="olho" aria-label="Ocultar saldo"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button><small>Saldo na Sociei</small><h1 id="saldo">R$ 0,00</h1></div>
+    <div class="linha"><span>Ganhos de hoje</span><strong id="hoje">R$ 0,00</strong></div>
+    <div class="linha"><span>Este mês</span><strong id="mes">R$ 0,00</strong></div>
+  </div>
+  <div class="card"><h2>🎯 Meta diária</h2>
+    <input id="meta" type="number" step="0.01" min="0" inputmode="decimal" placeholder="Definir meta (ex: 10,00)">
+    <div class="bar"><i id="pd"></i></div><div class="mt"><span id="md">R$ 0,00</span><span id="pdp">0%</span></div>
+    <div class="linha" style="margin-top:12px"><span>Dias seguidos na meta</span><strong id="streak">0</strong></div>
+  </div>
+  <div class="card"><h2>📅 Meta mensal</h2>
+    <input id="metam" type="number" step="0.01" min="0" inputmode="decimal" placeholder="Meta do mês (ex: 300,00)">
+    <div class="bar"><i id="pm"></i></div><div class="mt"><span id="mm">R$ 0,00</span><span id="pmp">0%</span></div>
+    <div class="linha" style="margin-top:14px"><span>Mês passado (total)</span><strong id="ant">R$ 0,00</strong></div>
+    <div class="linha"><span>Vs. mesmo período do mês passado</span><strong id="var">–</strong></div>
+  </div>
+  <div class="card"><h2>📈 Últimos 7 dias</h2><div class="barras" id="barras"></div></div>
+</main>
+
+<main id="t-registrar" class="tela"><div class="card"><h2>＋ Novo ganho na Sociei</h2>
+  <form id="form"><div class="row">
+    <div><label for="v">Valor (R$)</label><input id="v" type="number" step="0.01" min="0.01" inputmode="decimal" placeholder="0,00" required></div>
+    <div><label for="d">Data</label><input id="d" type="date" required></div></div>
+    <button class="btn" id="salvar" type="submit">Salvar ganho</button>
+    <button class="btn2" id="cancelar" type="button" style="display:none">Cancelar edição</button>
+  </form></div></main>
+
+<main id="t-historico" class="tela"><div class="card"><h2>🧾 Histórico</h2><div id="lista"></div>
+  <div class="linha" style="margin-top:20px;flex-direction:column"><strong>💾 Backup dos dados</strong>
+    <textarea id="bt" placeholder="O backup aparece aqui. Para restaurar, cole o texto e toque em Restaurar."></textarea>
+    <div style="display:flex;gap:10px;margin-top:10px"><button class="btn3" id="bg">Gerar backup</button><button class="btn3" id="br">Restaurar</button></div>
+    <small id="bm" style="margin-top:8px;color:var(--muted)"></small></div>
+  <button class="btn2" id="limpar">🗑️ Apagar todo o histórico</button></div></main>
+
+<nav>
+  <button class="nav-item ativo" data-t="inicio"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Início</span></button>
+  <button class="nav-item" data-t="registrar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span>Registrar</span></button>
+  <button class="nav-item" data-t="historico"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg><span>Histórico</span></button>
+</nav>
+
+<script>
+const CH='ganhos_sociei';let regs=[],mD=0,mM=0,oculto=false,edit=null;
+const $=id=>document.getElementById(id);
+const moeda=n=>Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const soma=l=>Math.round(l.reduce((s,r)=>s+r.valor,0)*100)/100;
+const dia=i=>{const d=new Date();d.setDate(d.getDate()-i);return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const valido=r=>r&&typeof r.valor==='number'&&typeof r.data==='string'&&typeof r.id==='number';
+function carregar(){try{const o=JSON.parse(localStorage.getItem(CH)||'{}');regs=Array.isArray(o.registros)?o.registros.filter(valido):[];mD=Number(o.meta)||0;mM=Number(o.meta_mes)||0}catch(e){}}
+function salvar(){try{localStorage.setItem(CH,JSON.stringify({registros:regs,meta:mD,meta_mes:mM}))}catch(e){}}
+function tela(t){document.querySelectorAll('.tela').forEach(x=>x.classList.remove('ativa'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('ativo',n.dataset.t===t));$('t-'+t).classList.add('ativa');window.scrollTo(0,0)}
+function barra(idBar,idTxt,idPct,atual,meta){const p=meta>0?Math.min(100,atual/meta*100):0;$(idBar).style.width=p+'%';$(idTxt).textContent=moeda(atual)+' de '+moeda(meta);$(idPct).textContent=Math.floor(p)+'%'}
+function render(){
+  const hj=dia(0),ms=hj.slice(0,7),n=Number(hj.slice(8));
+  const hoje=soma(regs.filter(r=>r.data===hj)),mes=soma(regs.filter(r=>r.data.slice(0,7)===ms));
+  $('saldo').textContent=moeda(soma(regs));$('hoje').textContent=moeda(hoje);$('mes').textContent=moeda(mes);
+  if(document.activeElement!==$('meta'))$('meta').value=mD||'';
+  if(document.activeElement!==$('metam'))$('metam').value=mM||'';
+  barra('pd','md','pdp',hoje,mD);barra('pm','mm','pmp',mes,mM);
+  let s=0,i=hoje>=mD?0:1;if(mD>0)while(i<400&&soma(regs.filter(r=>r.data===dia(i)))>=mD){s++;i++}
+  $('streak').textContent=s+(s===1?' dia':' dias');
+  const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);
+  const ant=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+  const aT=soma(regs.filter(r=>r.data.slice(0,7)===ant)),aP=soma(regs.filter(r=>r.data.slice(0,7)===ant&&Number(r.data.slice(8))<=n));
+  $('ant').textContent=moeda(aT);const v=$('var');
+  if(aP>0){const p=(mes-aP)/aP*100;v.textContent=(p>=0?'▲ ':'▼ ')+Math.abs(Math.round(p))+'%';v.style.color=p>=0?'var(--acc)':'var(--danger)'}else{v.textContent='–';v.style.color=''}
+  const dias=[6,5,4,3,2,1,0].map(i=>({iso:dia(i),v:soma(regs.filter(r=>r.data===dia(i)))}));
+  const mx=Math.max(...dias.map(x=>x.v),.01);
+  $('barras').innerHTML=dias.map(x=>`<div class="barra${x.iso===hj?' hoje':''}"><small>${x.v?moeda(x.v).replace('R$','').trim():''}</small><b style="height:${Math.max(3,x.v/mx*80)}px"></b><span>${new Date(x.iso+'T12:00').toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','')}</span></div>`).join('');
+  const l=[...regs].sort((a,b)=>b.data.localeCompare(a.data)||b.id-a.id);
+  $('lista').innerHTML=l.length?l.map(r=>`<div class="item"><div><div style="font-weight:600">${r.data.split('-').reverse().join('/')} <small>às ${new Date(r.id).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}</small></div></div><div style="display:flex;align-items:center"><b>${moeda(r.valor)}</b><button class="ib" data-e="${r.id}" aria-label="Editar">✎</button><button class="ib x" data-x="${r.id}" aria-label="Excluir">✕</button></div></div>`).join(''):'<div class="empty">Nenhum ganho registrado.</div>';
+}
+function fim(){edit=null;$('salvar').textContent='Salvar ganho';$('cancelar').style.display='none'}
+document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>{tela(n.dataset.t);render()});
+$('olho').onclick=()=>{oculto=!oculto;$('saldo').classList.toggle('oculto',oculto)};
+$('meta').oninput=()=>{const n=parseFloat($('meta').value);mD=isNaN(n)||n<0?0:n;salvar();render()};
+$('metam').oninput=()=>{const n=parseFloat($('metam').value);mM=isNaN(n)||n<0?0:n;salvar();render()};
+$('form').onsubmit=e=>{e.preventDefault();
+  const v=Math.round(parseFloat($('v').value)*100)/100,d=$('d').value;
+  if(isNaN(v)||v<=0){alert('Digite um valor maior que zero.');return}
+  if(!d){alert('Escolha uma data.');return}
+  if(edit){const r=regs.find(x=>x.id===edit);if(r){r.valor=v;r.data=d}fim()}else regs.push({id:Date.now(),valor:v,data:d});
+  salvar();$('v').value='';$('d').value=dia(0);render();tela('inicio')};
+$('cancelar').onclick=()=>{fim();$('v').value='';$('d').value=dia(0);tela('inicio')};
+$('lista').onclick=e=>{
+  const b=e.target.closest('[data-e]');
+  if(b){const r=regs.find(x=>x.id===Number(b.dataset.e));if(!r)return;edit=r.id;$('v').value=r.valor;$('d').value=r.data;$('salvar').textContent='Salvar alterações';$('cancelar').style.display='block';tela('registrar');return}
+  const x=e.target.closest('[data-x]');
+  if(x&&confirm('Deseja apagar este registro?')){regs=regs.filter(r=>r.id!==Number(x.dataset.x));salvar();render()}};
+$('limpar').onclick=()=>{if(confirm('Isso vai apagar TODOS os ganhos desta fonte. Tem certeza?')){regs=[];salvar();render()}};
+$('bg').onclick=async()=>{const t=JSON.stringify({registros:regs,meta:mD,meta_mes:mM}),a=$('bt');a.value=t;a.select();let ok=false;try{await navigator.clipboard.writeText(t);ok=true}catch(e){}$('bm').textContent=ok?'Backup copiado. Guarde em um lugar seguro.':'Selecione e copie o texto acima.'};
+$('br').onclick=()=>{try{const o=JSON.parse($('bt').value);if(!Array.isArray(o.registros))throw 0;const ok=o.registros.filter(valido);
+  if(!confirm('Substituir os dados atuais por '+ok.length+' registros do backup?'))return;
+  regs=ok;mD=Number(o.meta)||0;mM=Number(o.meta_mes)||0;salvar();render();$('bm').textContent='Dados restaurados.'}catch(e){$('bm').textContent='Texto inválido. Cole o backup completo.'}};
+carregar();$('d').value=dia(0);
+const dt=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'short'});$('hd').textContent=dt.charAt(0).toUpperCase()+dt.slice(1);
+render();
+</script>
+</body>
+</html>
